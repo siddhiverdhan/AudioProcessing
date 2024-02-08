@@ -2,10 +2,9 @@ import requests
 from config import config
 
 
-def send_audio():
+def send_audio(fileLocation, url):
     # print('attempting to send audio')
-    url = config.localurl
-    with open(config.testfilelocation, 'rb') as file:
+    with open(fileLocation, 'rb') as file:
         data = {'uuid': '-jx-1', 'alarmType': 1, 'timeDuration': 10}
         files = {'messageFile': file}
 
