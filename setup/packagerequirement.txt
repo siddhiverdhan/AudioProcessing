@@ -5,3 +5,6 @@ librosa
 scikit-learn
 pydub
 numpy
+soxbindings
+scaper
+nussl
