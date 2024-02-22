@@ -52,7 +52,7 @@ class VoiceRecorder:
             self.recording = True
             self.button.configure(fg="black")
             threading.Thread(target=self.record).start()
-        print(os.path.abspath())
+        #print(os.path.abspath())
     def record(self):
         audio = pyaudio.PyAudio()
         stream = audio.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, frames_per_buffer=1024)
@@ -79,12 +79,12 @@ class VoiceRecorder:
         i = 1
         while exists:
 
-            if os.path.exists(f"recording{i}.wav"):
+            if os.path.exists(f"./audiofiles/recording{i}.wav"):
                 i += 1
             else:
                 exists = False
 
-        sound_file = wave.open(f"recording{i}.wav", "wb")
+        sound_file = wave.open(f"./audiofiles/recording{i}.wav", "wb")
         sound_file.setnchannels(1)
         sound_file.setsampwidth(audio.get_sample_size(pyaudio.paInt16))
         sound_file.setframerate(44100)
