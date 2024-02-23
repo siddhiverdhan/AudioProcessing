@@ -1,31 +1,60 @@
 import librosa
 from config import config
-import matplotlib.pyplot as plt
-from dtw import dtw
+from fastdtw import fastdtw
 
-filename1 = config.testfilelocation1
-filename2 = config.testfilelocation2
+filename1 = config.file1Location
+filename2 = config.file2Location
 # Load the two audio files
-y1, sr1 = librosa.load('/Users/prashanthprabhu/Documents/GitHub/AudioProcessing/audiofiles/Adver.wav')
-y2, sr2 = librosa.load('/Users/prashanthprabhu/Documents/GitHub/AudioProcessing/audiofiles/Adver.wav')
+y1, sr1 = librosa.load(filename1)
+y2, sr2 = librosa.load(filename2)
 
-# Extract the MFCC features from each audio file
+return_dict = {}
+
+# Extract the features from each audio file
 mfcc1 = librosa.feature.mfcc(y = y1, sr = sr1)
 mfcc2 = librosa.feature.mfcc(y = y2, sr = sr2)
+chroma_stft1 = librosa.feature.chroma_stft(y=y1, sr=sr1)
+chroma_stft2 = librosa.feature.chroma_stft(y=y2, sr=sr2)
+spec_cent1 = librosa.feature.spectral_centroid(y=y1, sr=sr1)
+spec_cent2 = librosa.feature.spectral_centroid(y=y2, sr=sr2)
+spec_bw1 = librosa.feature.spectral_bandwidth(y=y1, sr=sr1)
+spec_bw2 = librosa.feature.spectral_bandwidth(y=y2, sr=sr2)
+rolloff1 = librosa.feature.spectral_rolloff(y=y1, sr=sr1)
+rolloff2 = librosa.feature.spectral_rolloff(y=y2, sr=sr2)
+zcr1 = librosa.feature.zero_crossing_rate(y1)
+zcr2 = librosa.feature.zero_crossing_rate(y2)
 
-#librosa.feature.mfcc()
-# Compute the distance between the two sets of features
-#distance = librosa.distance.cosine(mfcc1, mfcc2)
+#xsim = librosa.segment.cross_similarity(mfcc1, mfcc2)
+#print(xsim)
 
-dist, cost, path = dtw(mfcc1.T, mfcc2.T)
+dist, path = fastdtw(mfcc1.T, mfcc2.T)
+return_dict["mfcc"] = dist
 # Print the distance
-print(dist)
+print("Distance MFCC is :- " + str(dist))
 
-# Visualize the MFCC features
-plt.figure(figsize=(10, 4))
-librosa.display.mfcc(mfcc1)
-plt.colorbar()
-plt.title('MFCC Features')
-plt.xlabel('Time (s)')
-plt.ylabel('Frequency (Hz)')
-plt.show()
+dist, path = fastdtw(spec_cent1.T, spec_cent2.T)
+# Print the distance
+print("Distance SPCENT is :- " + str(dist))
+return_dict["spec_cent"] = dist
+
+dist, path = fastdtw(chroma_stft1.T, chroma_stft2.T)
+# Print the distance
+print("Distance Chroma Stft is :- " + str(dist))
+return_dict["chroma_stft"] = dist
+
+dist, path = fastdtw(spec_bw1.T, spec_bw2.T)
+# Print the distance
+print("Distance Spectral Bandwidth is :- " + str(dist))
+return_dict["spec_bw"] = dist
+
+dist, path = fastdtw(rolloff1.T, rolloff2.T)
+return_dict["roll_off"] = dist
+# Print the distance
+print("Distance roll off frequence is :- " + str(dist))
+
+return_dict["zero_cross_rate"] = dist
+dist, path = fastdtw(zcr1.T, zcr2.T)
+# Print the distance
+print("Distance zero crossing rate is :- " + str(dist))
+
+#print(return_dict)
