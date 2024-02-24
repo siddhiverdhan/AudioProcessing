@@ -9,48 +9,64 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import messagebox, ttk
-#from ttkbootstrap import Style
+from ttkbootstrap import Style
+import ttkbootstrap as tb
 
 
 class VoiceRecorder:
 
+
     def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("Voice Recorder")
-        self.root.geometry("600x500")
-        self.root.resizable(False, False)
+        global source
+        global target
+        # self.root = tk.Tk()
+        self.root = tb.Window(themename='darkly')
+        self.root.title("Voice Compare")
+        self.root.geometry("1000x1000")
+        #self.root.resizable(False, False)
         # Apply styling to GUI elements
-        # style = Style(theme='superhero')
-        # style.configure('TLabel', font=('TkDefaultFont', 18))
-        # style.configure('TButton', font=('TkDefaultFont', 16))
-        # Notebook widget to manage tabs
-        # self.notebook = ttk.Notebook(self.root)
-        # self.notebook.pack(fill='both', expand=True)
-        # Record Voice Tab
-        # create_rec_voice = ttk.Frame(self.notebook)
-        # self.notebook.add(create_rec_voice, text="Record Voice")
-        # tk.Button(create_rec_voice, text='Record Audio').pack(padx=5, pady=10)
-        # ttk.Label(create_rec_voice, text='Time:').pack(padx=5, pady=10)
-        # Record Voice Tab Old
-        # create_rec_voice_old = ttk.Frame(self.notebook)
-        # self.notebook.add(create_rec_voice_old, text="Record Voice Old")
-        self.button = tk.Button(text="♫", anchor="center", font=("Arial", 120, "bold"), command=self.click_handler)
-        # ttk.Button(create_rec_voice_old, text='Record', command=self.click_handler).pack(padx=5, pady=10)
-        self.button.pack(pady=70, anchor="center")
-        self.label = tk.Label(text="00:00:00", fg="black")
+        # style = Style(theme='darkly')
+        # self.button = tk.Button(text="♫", anchor="center", font=("Arial", 120, "bold"), command=self.click_handler)
+        # # ttk.Button(create_rec_voice_old, text='Record', command=self.click_handler).pack(padx=5, pady=10)
+        # self.button.pack(pady=10, anchor="center")
+        self.rec_button = tb.Button(text="♫", style="success, outline", command=self.click_handler)
+        self.rec_button.pack(pady=20)
+        self.label = tb.Label(text="00:00:00", style="primary")
         self.label.pack(pady=10)
         self.recording = False
+        src_label = tb.Label(text="SOURCE FILE",font=("Helvetica", 28), style="default")
+        self.label1 = tb.Label(text="SOURCE", font=("Helvetica", 28), style="default")
+        self.label1.pack(pady=10)
+        # self.source_audio()
+        files = os.listdir("./audiofiles/")
+        source = tb.Combobox(style="success", values=files)
+        source.current(0)
+
+        source.pack()
+        self.label2 = tb.Label(text="TARGET", font=("Helvetica", 28), style="default")
+        self.label2.pack(pady=10)
+        # self.target_audio()
+        files = os.listdir("./audiofiles/")
+        target = tb.Combobox( style="success", values=files)
+        target.current(0)
+        target.pack()
+        self.compare_button = tb.Button(text="COMPARE", style="success, outline", command=self.compare)
+        self.compare_button.pack(pady=20)
+        # print(target.get())
+
+
         self.root.mainloop()
 
     def click_handler(self):
         if self.recording:
-            print("NOT RECORDING", self.button.configure().keys())
+            print("NOT RECORDING")
             self.recording = False
-            self.button.configure(fg="red")
+            # self.label = tk.Label(text="00:00:00")
+            self.rec_button.configure(style="default")
         else:
-            print("RECORDING", self.button.configure().keys())
+            print("RECORDING")
             self.recording = True
-            self.button.configure(fg="black")
+            # self.rec_button.configure(style="warning")
             threading.Thread(target=self.record).start()
         #print(os.path.abspath())
     def record(self):
@@ -78,7 +94,7 @@ class VoiceRecorder:
         exists = True
         i = 1
         while exists:
-
+            print('Entered While to save')
             if os.path.exists(f"./audiofiles/recording{i}.wav"):
                 i += 1
             else:
@@ -91,20 +107,28 @@ class VoiceRecorder:
         sound_file.writeframes(b"".join(frames))
         sound_file.close()
 
-        # sound_file = wave.open(f"recording{i}.wav")
-        # signal_wave = sound_file.readframes(-1)
-        # t_audio = sound_file.getnframes() / sound_file.getframerate()
-        # signal_array = np.frombuffer(signal_wave, dtype=np.int16)
-        # n_samples = sound_file.getnframes()
-        # sound_file.close()
-        # times = np.linspace(0, t_audio, num=n_samples)
-        #
-        # plt.figure(figsize=(15, 5))
-        # plt.plot(times, signal_array)
-        # plt.title("Audio")
-        # plt.ylabel("sign wave")
-        # plt.xlabel("Time (s)")
-        # plt.xlim(0, t_audio)
+    # def source_audio(self):
+    #     # source = tk.Listbox()
+    #
+    #
+    # def target_audio(self):
+        # target = tk.Listbox()
+
+
+    def compare(self):
+        print(source.get())
+        print(target.get())
+        self.compare_button.clickable = False
+
+        self.my_gauge = tb.Floodgauge(style="success", font=("helvetica", 18), mask="Pos: {}", maximum=100,
+                                      orient="horizontal", value=0, mode="indeterminate")
+        self.my_gauge.pack(fill = "x", pady=20)
+        self.my_gauge.start()
+
+        self.compare_button.clickable = True
+
+
+        pass
 
 
 VoiceRecorder()
