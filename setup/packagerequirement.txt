@@ -9,8 +9,7 @@ numpy
 soxbindings
 scaper
 nussl
-dtw
-dtaidistance
 pyaudio
 fastdtw
 waitress
+ttkbootstrap

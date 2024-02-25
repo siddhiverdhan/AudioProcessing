@@ -1,27 +1,14 @@
 FROM ubuntu
-FROM python:3.8
+FROM python:3.8-slim-buster
 
 # set the working directory in the container
 WORKDIR /code
 
-# copy the dependencies file to the working directory
-COPY setup/packagerequirement.txt .
-
-# install pyaudio
-
-RUN apt-get update
-RUN apt-get install libasound-dev libportaudio2 libportaudiocpp0 portaudio19-dev -y
-RUN pip3 install pyaudio
+# copy the content of the local src directory to the working directory
+COPY src/ .
 
 # install dependencies
-RUN pip3 install -r packagerequirement.txt
-
-# copy the content of the local src directory to the working directory
-
-COPY / .
-COPY LibrosaAudioCompare.py .
-COPY config.py .
-COPY setup/ .
+RUN pip3 install -r requirements.txt
 
 # command to run on container start
-CMD [ "python3", "app/api.py" ]
+CMD [ "python3", "app.py" ]

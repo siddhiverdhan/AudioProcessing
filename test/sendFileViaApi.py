@@ -13,6 +13,7 @@ def send_audio(filelist, url):
 file1 = config.file1Location
 file2 = config.file2Location
 
-files = {'audio1': open(file1, 'rb'), 'audio2': open(file2 , 'rb')}
-send_audio(files, config.localurl)
+files = {'audio1': open(file1, 'rb'), 'audio2': open(file1, 'rb')}
+print(config.gcp_url)
+send_audio(files, config.gcp_url)
 
