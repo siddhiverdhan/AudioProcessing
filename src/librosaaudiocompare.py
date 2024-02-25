@@ -54,5 +54,16 @@ def compare_audio(filename1, filename2):
     # Print the distance
     print("Distance zero crossing rate is :- " + str(dist))
 
-    print(return_dict)
-    return return_dict
+    data = match_probability(return_dict)
+    print(data)
+    return data
+
+
+def match_probability(data):
+    if data["mfcc"]==0.0 and data["spec_cent"]==0.0 and data["chroma_stft"] == 0.0 and data["spec_bw"] == 0.0 and data["roll_off"] == 0.0 and data["zero_cross_rate"] == 0.0:
+        data["Probability_of_Match"] = "100"
+    else:
+        data["Probability_of_Match"] = "<100"
+
+    return data
+
