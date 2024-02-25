@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-from config import config
+import config
 import librosa
 
 np.set_printoptions(threshold=sys.maxsize)

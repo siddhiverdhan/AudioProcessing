@@ -1,11 +1,7 @@
-import os
-import sys
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
-from scipy import signal
-from config import config
+import config
 
 # Import the .wav audio
 file = config.testfilelocation
