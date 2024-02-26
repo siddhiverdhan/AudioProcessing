@@ -13,4 +13,3 @@ dtw
 dtaidistance
 pyaudio
 fastdtw
-ttkbootstrap

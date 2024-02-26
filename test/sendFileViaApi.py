@@ -1,13 +1,19 @@
 import requests
-from config import config
+import config
 
 
-def send_audio(file, url):
+def send_audio(filelist, url):
     # print('attempting to send audio')
-    with open(file, 'rb') as file:
-        data = {'uuid': '-jx-1', 'alarmType': 1, 'timeDuration': 10}
-        files = {'messageFile': file}
 
-        req = requests.post(url, files=files, json=data)
-        print(req.status_code)
-        print(req.text)
+    req = requests.post(url, files=filelist)
+    print(req.status_code)
+    print(req.text)
+
+
+file1 = config.file1Location
+file2 = config.file2Location
+
+files = {'audio1': open(file1, 'rb'), 'audio2': open(file1, 'rb')}
+print(config.gcp_url)
+send_audio(files, config.gcp_url)
+
