@@ -143,7 +143,7 @@ class VoiceRecorder:
         sound_file.close()
 
     # def source_audio(self):
-    #     # source = tk.Listbox()
+    #     source = tk.Listbox()
     #
     #
     # def target_audio(self):
